@@ -1,0 +1,41 @@
+language: android
+jdk: oraclejdk11
+
+android:
+  components:
+    # Update SDK manager
+    - tools
+    - platform-tools
+    - build-tools-30.0.3
+    - android-31
+
+    # The SDK version to compile against
+    - android-31
+
+    # Specify the Android Support Repository, as it is required for several Android libraries
+    - extra-android-m2repository
+    - extra-google-m2repository
+
+before_install:
+  # Ensure the necessary components are installed
+  - yes | sdkmanager "platforms;android-31"
+
+  # Grant execute permissions for gradlew
+  - chmod +x gradlew
+
+script:
+  # Run the build
+  - ./gradlew build
+  # Run tests (if any)
+  - ./gradlew test
+  # Run instrumentation tests (if any)
+  - ./gradlew connectedAndroidTest
+
+# Optionally, you can cache Gradle dependencies to speed up builds
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
+notifications:
+  email: false
