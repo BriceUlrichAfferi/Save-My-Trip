@@ -1,25 +1,27 @@
-name: CI
+name: Android CI
+
 on:
   push:
-    branches: [ master ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ master ]
-  workflow_dispatch:
+    branches: [ "main" ]
 
 jobs:
-  lint:
+ lint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
+
+      - name: Run lint
+        run: ./gradlew lintDebug
 
       - name: Upload html test report
         uses: actions/upload-artifact@v2
         with:
           name: lint.html
           path: app/build/reports/lint-results-debug.html
-
-  unit-test:
+ unit-test:
     needs: [lint]
     runs-on: ubuntu-latest
     steps:
@@ -34,3 +36,4 @@ jobs:
         with:
           name: unit_test_report
           path: app/build/reports/tests/testDebugUnitTest/
+          
